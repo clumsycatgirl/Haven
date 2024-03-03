@@ -1,0 +1,7 @@
+------ [logs] ------
+--- [project configuration] ---
+ - Name: 'Tester'
+ - Version: '1.0.0.0'
+ - Author: 'Tester'
+ - Build: 'Debug'
+

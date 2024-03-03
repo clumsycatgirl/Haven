@@ -1,0 +1,7 @@
+------ [logs] ------
+--- [project configuration] ---
+ - Name: 'Haven'
+ - Version: '1.0.0.0'
+ - Author: 'Haven'
+ - Build: 'Debug'
+

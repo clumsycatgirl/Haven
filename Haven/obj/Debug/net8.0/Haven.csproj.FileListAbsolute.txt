@@ -1,0 +1,12 @@
+D:\projects\c#\Haven\Haven\bin\Debug\net8.0\Haven.deps.json
+D:\projects\c#\Haven\Haven\bin\Debug\net8.0\Haven.dll
+D:\projects\c#\Haven\Haven\bin\Debug\net8.0\Haven.pdb
+D:\projects\c#\Haven\Haven\obj\Debug\net8.0\Haven.csproj.AssemblyReference.cache
+D:\projects\c#\Haven\Haven\obj\Debug\net8.0\Haven.GeneratedMSBuildEditorConfig.editorconfig
+D:\projects\c#\Haven\Haven\obj\Debug\net8.0\Haven.AssemblyInfoInputs.cache
+D:\projects\c#\Haven\Haven\obj\Debug\net8.0\Haven.AssemblyInfo.cs
+D:\projects\c#\Haven\Haven\obj\Debug\net8.0\Haven.csproj.CoreCompileInputs.cache
+D:\projects\c#\Haven\Haven\obj\Debug\net8.0\Haven.dll
+D:\projects\c#\Haven\Haven\obj\Debug\net8.0\refint\Haven.dll
+D:\projects\c#\Haven\Haven\obj\Debug\net8.0\Haven.pdb
+D:\projects\c#\Haven\Haven\obj\Debug\net8.0\ref\Haven.dll
