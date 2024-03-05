@@ -10,3 +10,4 @@ D:\projects\c#\Haven\Haven\obj\Debug\net8.0\Haven.dll
 D:\projects\c#\Haven\Haven\obj\Debug\net8.0\refint\Haven.dll
 D:\projects\c#\Haven\Haven\obj\Debug\net8.0\Haven.pdb
 D:\projects\c#\Haven\Haven\obj\Debug\net8.0\ref\Haven.dll
+D:\projects\c#\Haven\Haven\obj\Debug\net8.0\Haven.sourcelink.json

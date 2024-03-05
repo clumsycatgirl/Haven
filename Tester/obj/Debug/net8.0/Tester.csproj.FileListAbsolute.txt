@@ -26,3 +26,4 @@ D:\projects\c#\Haven\Tester\obj\Debug\net8.0\refint\Tester.dll
 D:\projects\c#\Haven\Tester\obj\Debug\net8.0\Tester.pdb
 D:\projects\c#\Haven\Tester\obj\Debug\net8.0\Tester.genruntimeconfig.cache
 D:\projects\c#\Haven\Tester\obj\Debug\net8.0\ref\Tester.dll
+D:\projects\c#\Haven\Tester\obj\Debug\net8.0\Tester.sourcelink.json

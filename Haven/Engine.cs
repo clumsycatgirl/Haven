@@ -15,6 +15,8 @@ public class Engine : Game {
 
 	private Scene scene;
 
+	public bool ExitOnEscape = true;
+
 	public static Scene Scene {
 		get => Instance.scene;
 		set => Instance.scene = value;
@@ -58,7 +60,7 @@ public class Engine : Game {
 
 		Input.Update();
 
-		if (Input.Keyboard.Pressed(Keys.Escape)) {
+		if (ExitOnEscape && Input.Keyboard.Pressed(Keys.Escape)) {
 			Exit();
 		}
 
