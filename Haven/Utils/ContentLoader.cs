@@ -24,6 +24,12 @@ public static class ContentLoader {
 		return null;
 	}
 
+	public static Dictionary<string, HTexture2D> GetTextures2D() {
+		return TextureAtlases
+				.SelectMany(atlasPair => atlasPair.Value.Regions.Keys,
+							(atlasPair, regionName) => new { atlasPair.Key, RegionName = regionName })
+				.ToDictionary(x => x.RegionName, x => new HTexture2D(x.Key, x.RegionName));
+	}
 
 	public static void LoadContent() {
 		Log.WriteLine($"--- [Loading Textures] ---");

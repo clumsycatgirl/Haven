@@ -103,7 +103,7 @@ namespace MapMaker {
 			MapData mapData = new() {
 				Textures = new HTexture2D[width, height],
 				Grid = new() {
-					ShowGridLines = true,
+					ShowGridLines = false,
 				}
 			};
 			mapsData[name] = mapData;
@@ -188,12 +188,66 @@ namespace MapMaker {
 
 		private void CreateCommandsPanel(Grid parent) {
 			VerticalStackPanel panel = new() {
+				Left = 8,
+				Top = 8,
+				Spacing = 8,
 			};
 
-			Button button = new() { Content = new Label { Text = "show grid lines" } };
+			Button button = new() {
+				Content = new Label { Text = "show grid lines" },
+				HorizontalAlignment = HorizontalAlignment.Left,
+			};
 			button.Click += (s, a) => mapsData[MapName].Grid.ShowGridLines = !mapsData[MapName].Grid.ShowGridLines;
 
 			panel.Widgets.Add(button);
+
+			Dictionary<string, HTexture2D> textures = ContentLoader.GetTextures2D();
+			panel.Widgets.Add(new HorizontalSeparator());
+			foreach (KeyValuePair<string, HTexture2D> kvp in textures) {
+				Button textureButton = new() {
+					Content = new Image {
+						Renderable = new TextureRegion(
+							kvp.Value.Texture,
+							kvp.Value.ClipRect
+						),
+					},
+					Scale = new Vector2(2.5f, 2.5f),
+					VerticalAlignment = VerticalAlignment.Center,
+					HorizontalAlignment = HorizontalAlignment.Center,
+				};
+				textureButton.Click += (s, a) => {
+					foreach (Widget widget in mapsData[MapName].Grid.Widgets) {
+						if (widget is Button b) {
+							b.Content = new Image {
+								Renderable = new TextureRegion(
+									kvp.Value.Texture,
+									kvp.Value.ClipRect
+								)
+							};
+						}
+					}
+				};
+
+				Grid textureGrid = new() {
+					Tooltip = kvp.Key,
+				};
+				textureGrid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 45));
+				textureGrid.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, 45));
+				textureGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+
+				Grid.SetColumn(textureButton, 0);
+				Grid.SetRow(textureButton, 0);
+
+				Label textureLabel = new() { Text = kvp.Key, VerticalAlignment = VerticalAlignment.Center };
+				Grid.SetColumn(textureLabel, 1);
+				Grid.SetRow(textureLabel, 0);
+
+				textureGrid.Widgets.Add(textureButton);
+				textureGrid.Widgets.Add(textureLabel);
+
+				panel.Widgets.Add(textureGrid);
+				panel.Widgets.Add(new HorizontalSeparator());
+			}
 
 			Grid.SetRow(parent, 0);
 			Grid.SetColumn(parent, 0);
