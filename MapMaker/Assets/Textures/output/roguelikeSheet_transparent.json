@@ -1,0 +1,49 @@
+{
+	"frames": [
+		{
+			"filename": "water-1",
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"width": 16,
+				"height": 16
+			}
+		},
+		{
+			"filename": "water-2",
+			"frame": {
+				"x": 17,
+				"y": 0,
+				"width": 16,
+				"height": 16
+			}
+		},
+		{
+			"filename": "grass-1",
+			"frame": {
+				"x": 85,
+				"y": 0,
+				"width": 16,
+				"height": 16
+			}
+		},
+		{
+			"filename": "dirt-1",
+			"frame": {
+				"x": 102,
+				"y": 0,
+				"width": 16,
+				"height": 16
+			}
+		},
+		{
+			"filename": "stone-1",
+			"frame": {
+				"x": 119,
+				"y": 0,
+				"width": 16,
+				"height": 16
+			}
+		}
+	]
+}

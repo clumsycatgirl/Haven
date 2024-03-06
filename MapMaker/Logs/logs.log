@@ -7,9 +7,29 @@
 
 
 --- [Loading Textures] ---
-selected menuItem1
-selected menuItem2
-selected menuItem1
-selected menuItem2
-selected menuItem2
-selected menuItem1
+ - roguelikeSheet_transparent
+    - 'water-1'
+        - x: 0
+        - y: 0
+        - w: 16
+        - h: 16
+    - 'water-2'
+        - x: 17
+        - y: 0
+        - w: 16
+        - h: 16
+    - 'grass-1'
+        - x: 85
+        - y: 0
+        - w: 16
+        - h: 16
+    - 'dirt-1'
+        - x: 102
+        - y: 0
+        - w: 16
+        - h: 16
+    - 'stone-1'
+        - x: 119
+        - y: 0
+        - w: 16
+        - h: 16

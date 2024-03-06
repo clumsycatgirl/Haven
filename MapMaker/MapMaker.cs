@@ -1,22 +1,35 @@
 ﻿
+using System.Collections.Generic;
+
 using Haven;
 using Haven.Ecs;
 using Haven.Ecs.Components;
+using Haven.Graphics;
 using Haven.Utils;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Myra;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 
 namespace MapMaker {
 	public class MapMaker : Engine {
 		public static new MapMaker Instance { get; private set; }
 
-		private readonly Desktop desktop = new();
+		private Desktop desktop;
+		internal class MapData {
+			internal HTexture2D[,] Textures;
+			internal Grid Grid;
+		}
+		private readonly Dictionary<string, MapData> mapsData;
+		private string MapName = "";
 
 		public MapMaker() : base() {
 			Instance = this;
+
+			mapsData = new();
 		}
 
 		protected override void LoadContent() {
@@ -24,52 +37,173 @@ namespace MapMaker {
 
 			MyraEnvironment.Game = this;
 
-			desktop.TouchDown += (s, e) => {
-				if (desktop.ContextMenu is not null) return;
+			desktop = new();
 
-				VerticalStackPanel container = new() {
-					Spacing = 4,
-				};
-
-				Panel titleContainer = new() {
-					Background = DefaultAssets.DefaultStylesheet.Atlas["button"],
-				};
-
-				Label titleLabel = new() {
-					Text = "click",
-					HorizontalAlignment = HorizontalAlignment.Center,
-				};
-
-				titleContainer.Widgets.Add(titleLabel);
-				container.Widgets.Add(titleContainer);
-
-				MenuItem menuItem1 = new() {
-					Text = "create new map",
-				};
-				menuItem1.Selected += (s, e) => Log.WriteLine("selected menuItem1");
-
-				MenuItem menuItem2 = new() {
-					Text = "open map",
-				};
-				menuItem2.Selected += (s, e) => Log.WriteLine("selected menuItem2");
-
-				MenuItem menuItem3 = new() {
-					Text = "Quit"
-				};
-
-				VerticalMenu verticalMenu = new();
-				verticalMenu.Items.Add(menuItem1);
-				verticalMenu.Items.Add(menuItem2);
-				verticalMenu.Items.Add(menuItem3);
-
-				container.Widgets.Add(verticalMenu);
-
-				desktop.ShowContextMenu(container, desktop.TouchPosition ?? Point.Zero);
+			Grid grid = new() {
+				RowSpacing = 8,
+				ColumnSpacing = 8,
+				Scale = new Vector2(2.0f, 2.0f),
 			};
+
+			for (int i = 0; i < 3; i++) {
+				grid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 25));
+				grid.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, 90));
+			}
+
+			Label nameLabel = new() { Text = "Map Name" };
+			TextBox nameBox = new();
+			Grid.SetRow(nameLabel, 0);
+			Grid.SetColumn(nameLabel, 0);
+			grid.Widgets.Add(nameLabel);
+			Grid.SetRow(nameBox, 0);
+			Grid.SetColumn(nameBox, 1);
+			grid.Widgets.Add(nameBox);
+
+			Label widthLabel = new() { Text = "Width" };
+			TextBox widthBox = new();
+			Grid.SetRow(widthLabel, 1);
+			Grid.SetColumn(widthLabel, 0);
+			grid.Widgets.Add(widthLabel);
+			Grid.SetRow(widthBox, 1);
+			Grid.SetColumn(widthBox, 1);
+			grid.Widgets.Add(widthBox);
+
+			Label heightLabel = new() { Text = "Height" };
+			TextBox heightBox = new();
+			Grid.SetRow(heightLabel, 2);
+			Grid.SetColumn(heightLabel, 0);
+			grid.Widgets.Add(heightLabel);
+			Grid.SetRow(heightBox, 2);
+			Grid.SetColumn(heightBox, 1);
+			grid.Widgets.Add(heightBox);
+
+			Button createMapButton = new() { Content = new Label { Text = "Create Map" } };
+			createMapButton.Click += (s, a) => {
+				string name = nameBox.Text ?? "test";
+				uint width = uint.Parse(widthBox.Text ?? "10");
+				uint height = uint.Parse(heightBox.Text ?? "10");
+
+				CreateGrid(name, width, height);
+			};
+			Grid.SetRow(createMapButton, 3);
+			Grid.SetColumn(createMapButton, 2);
+			grid.Widgets.Add(createMapButton);
+
+			grid.VerticalAlignment = VerticalAlignment.Center;
+			grid.HorizontalAlignment = HorizontalAlignment.Center;
+
+			desktop.Root = grid;
+		}
+
+		private void CreateGrid(string name, uint width, uint height) {
+			if (mapsData.ContainsKey(name)) {
+				goto end;
+			}
+
+			MapData mapData = new() {
+				Textures = new HTexture2D[width, height],
+				Grid = new() {
+					ShowGridLines = true,
+				}
+			};
+			mapsData[name] = mapData;
+
+			for (int i = 0; i < height; i++) {
+				mapData.Grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			}
+
+			for (int i = 0; i < width; i++) {
+				mapData.Grid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			}
+
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					Button button = new() {
+						Content = new Image {
+							Renderable = new TextureRegion(
+								ContentLoader.GetTexture2d("water-1").Texture,
+								ContentLoader.GetTexture2d("water-1").ClipRect
+							)
+						}
+					};
+					Grid.SetRow(button, y);
+					Grid.SetColumn(button, x);
+					button.Click += (s, a) => {
+						Log.WriteLine($"clicked: [{x},{y}]");
+					};
+					mapData.Grid.Widgets.Add(button);
+				}
+			}
+
+		end:
+			MapName = name;
+
+			Grid outerLayoutGrid = new() {
+				RowSpacing = 4,
+				ColumnSpacing = 4,
+				ShowGridLines = true,
+			};
+			outerLayoutGrid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 45));
+			outerLayoutGrid.RowsProportions.Add(new Proportion(ProportionType.Fill));
+			outerLayoutGrid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 45));
+			outerLayoutGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+
+			Label titleLabel = new() {
+				Text = "Map Maker",
+				Scale = new Vector2(2.0f, 2.0f),
+				VerticalAlignment = VerticalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Center,
+			};
+			outerLayoutGrid.Widgets.Add(titleLabel);
+			Label lowerLabel = new() {
+				Text = "v.0.1",
+				VerticalAlignment = VerticalAlignment.Center,
+				Left = 10,
+			};
+			Grid.SetRow(lowerLabel, 2);
+			Grid.SetColumn(lowerLabel, 0);
+			outerLayoutGrid.Widgets.Add(lowerLabel);
+
+			Grid innerLayoutGrid = new() {
+				RowSpacing = 4,
+				ColumnSpacing = 4,
+				ShowGridLines = true,
+			};
+			innerLayoutGrid.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, 250));
+			innerLayoutGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			innerLayoutGrid.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, 45));
+
+			CreateCommandsPanel(innerLayoutGrid);
+
+			Grid.SetRow(innerLayoutGrid, 1);
+			Grid.SetColumn(innerLayoutGrid, 0);
+			outerLayoutGrid.Widgets.Add(innerLayoutGrid);
+
+			Grid.SetRow(mapsData[name].Grid, 0);
+			Grid.SetColumn(mapsData[name].Grid, 1);
+			innerLayoutGrid.Widgets.Add(mapsData[name].Grid);
+
+			desktop.Root = outerLayoutGrid;
+		}
+
+		private void CreateCommandsPanel(Grid parent) {
+			VerticalStackPanel panel = new() {
+			};
+
+			Button button = new() { Content = new Label { Text = "show grid lines" } };
+			button.Click += (s, a) => mapsData[MapName].Grid.ShowGridLines = !mapsData[MapName].Grid.ShowGridLines;
+
+			panel.Widgets.Add(button);
+
+			Grid.SetRow(parent, 0);
+			Grid.SetColumn(parent, 0);
+			parent.Widgets.Add(panel);
 		}
 
 		protected override void Initialize() {
 			base.Initialize();
+
+			Window.AllowUserResizing = true;
 		}
 
 		protected override void Draw(GameTime gameTime) {

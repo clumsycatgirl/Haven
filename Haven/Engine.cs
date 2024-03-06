@@ -1,4 +1,6 @@
 ﻿
+using System.Runtime.InteropServices;
+
 namespace Haven;
 
 [Serializable]
@@ -112,5 +114,12 @@ public class Engine : Game {
 		base.Dispose(disposing);
 
 		Log.Dispose();
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	private static extern void SDL_MaximizeWindow(IntPtr window);
+
+	protected void MaximizeWindow() {
+		SDL_MaximizeWindow(Window.Handle);
 	}
 }
