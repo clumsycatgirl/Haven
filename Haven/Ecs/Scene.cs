@@ -1,4 +1,6 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace Haven.Ecs;
 
 [Serializable]
@@ -94,5 +96,29 @@ public class Scene {
 		foreach (Entity entity in entities) {
 			entity.Removed(this);
 		}
+	}
+
+	public T GetEntity<T>(Guid id) where T : Entity {
+		return Entities.Find(e => e.Id == id) as T;
+	}
+
+	public T GetEntity<T>(Predicate<T> predicate) where T : Entity {
+		return Entities.Find(e => e is T && predicate(e as T)) as T;
+	}
+
+	public T GetEntity<T>() where T : Entity {
+		return Entities.Find(e => e is T) as T;
+	}
+
+	public IEnumerable<T> GetEntities<T>() where T : Entity {
+		return Entities.Where(e => e is T).Cast<T>();
+	}
+
+	public IEnumerable<T> GetEntities<T>(Predicate<T> predicate) where T : Entity {
+		return Entities.Where(e => e is T && predicate(e as T)).Cast<T>();
+	}
+
+	public IEnumerable<T> GetEntitiesOfTag<T>(string tag) where T : Entity {
+		return Entities.Where(e => e.Tags.Has(tag)).Cast<T>();
 	}
 }

@@ -4,7 +4,7 @@ namespace Haven.Ecs.Components;
 [Serializable]
 [DataContract]
 [Component]
-[DependsOn(typeof(SizeComponent))]
+[RequireComponentAttribute(typeof(SizeComponent))]
 public class AnimationComponent(bool active) : Component(active, true) {
 	[DataMember]
 	public List<HTexture2D> Frames;

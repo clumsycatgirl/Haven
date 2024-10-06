@@ -4,7 +4,6 @@ namespace Haven.Ecs;
 [Serializable]
 [DataContract]
 [Entity]
-[RequireComponent(typeof(TransformComponent), typeof(SizeComponent), typeof(SpriteComponent))]
 public class Entity {
 	[DataMember]
 	public bool Active;
@@ -16,16 +15,22 @@ public class Entity {
 	[DataMember]
 	public ComponentList Components { get; private set; }
 
-	public Entity(Vector2 position) {
+	public Entity() : this(Vector2.Zero, Vector2.Zero) { }
+	public Entity(Vector2 position) : this(position, Vector2.Zero) { }
+	public Entity(Vector2 position, Vector2 size) {
 		Components = new ComponentList(this);
 
 		Add([
+			new IdComponent(),
+			new TagComponent(),
 			new TransformComponent(position),
-			new SizeComponent(),
+			new SizeComponent(size),
 		]);
 	}
 
-	public Entity() : this(Vector2.Zero) { }
+	public Entity(float x, float y) : this(new Vector2(x, y), Vector2.Zero) { }
+	public Entity(float x, float y, float width, float height) : this(new Vector2(x, y), new Vector2(width, height)) { }
+
 
 	public virtual void Added(Scene scene) {
 		Scene = scene;
@@ -99,4 +104,6 @@ public class Entity {
 
 	public TransformComponent Transform => Get<TransformComponent>();
 	public SizeComponent Size => Get<SizeComponent>();
+	public Guid Id => Get<IdComponent>().Id;
+	public Utils.TagList Tags => Get<TagComponent>().Tags;
 }

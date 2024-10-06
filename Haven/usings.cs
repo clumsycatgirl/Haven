@@ -18,9 +18,12 @@ global using Haven.Ecs.Components;
 global using Haven.Graphics;
 global using Haven.Inputs;
 global using Haven.Utils;
+global using Haven.Exceptions;
+global using Haven.Diagnostics;
 
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
 
 global using MonoGame.Framework;
+

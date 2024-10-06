@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace Haven.Ecs.Components;
 
 [Serializable]
@@ -14,9 +12,9 @@ public class TransformComponent(Vector2 position, float rotation, Vector2 scale)
 	[DataMember]
 	public Vector2 Scale = scale;
 
-	public TransformComponent() : this(Vector2.Zero, 0.0f, Vector2.One) { }
+	public TransformComponent() : this(Vector2.Zero) { }
 
-	public TransformComponent(Vector2 position) : this() {
-		Position = position;
-	}
+	public TransformComponent(Vector2 position) : this(position, 0.0f) { }
+
+	public TransformComponent(Vector2 position, float rotation) : this(position, rotation, Vector2.One) { }
 }

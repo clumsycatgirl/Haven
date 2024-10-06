@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Haven;
 using Haven.Ecs;
@@ -14,7 +16,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Tester.Components {
 	[Serializable]
 	[Component]
-	[DependsOn(typeof(TransformComponent), typeof(SizeComponent))]
+	[RequireComponentAttribute(typeof(TransformComponent), typeof(SizeComponent), typeof(DebugComponent))]
 	internal class MovementComponent : Component {
 		public const float MaxMovementSpeed = 95.0f;
 		public float MovementSpeed = MaxMovementSpeed;
@@ -85,11 +87,14 @@ namespace Tester.Components {
 
 		public void CheckCollision() {
 			// Floor
-			if (Entity.Transform.Position.Y + Entity.Size.Height >= Tester.Instance.Obstacle.Transform.Position.Y) {
-				Entity.Transform.Position.Y = Tester.Instance.Obstacle.Transform.Position.Y - Entity.Size.Height;
-				Grounded = true;
-			} else {
-				Grounded = false;
+			IEnumerable<Entity> flooors = Scene.GetEntitiesOfTag<Entity>("floor");
+			foreach (Entity floor in flooors) {
+				if (Entity.Transform.Position.Y + Entity.Size.Height >= floor.Transform.Position.Y) {
+					Entity.Transform.Position.Y = floor.Transform.Position.Y - Entity.Size.Height;
+					Grounded = true;
+				} else {
+					Grounded = false;
+				}
 			}
 		}
 

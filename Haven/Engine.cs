@@ -1,10 +1,11 @@
 ﻿
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace Haven;
 
 [Serializable]
-public class Engine : Game {
+public partial class Engine : Game {
 	public static Engine Instance { get; private set; }
 	public static GraphicsDeviceManager Graphics { get; private set; }
 	public static float RawDeltaTime { get; private set; }
@@ -46,6 +47,8 @@ public class Engine : Game {
 	}
 
 	protected override void Initialize() {
+		ImmutabilityChecker.Initialize(); // move this
+
 		Input.Initialize();
 		Renderer.Initialize(GraphicsDevice);
 
@@ -112,12 +115,12 @@ public class Engine : Game {
 
 	protected override void Dispose(bool disposing) {
 		base.Dispose(disposing);
-
 		Log.Dispose();
 	}
 
-	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
-	private static extern void SDL_MaximizeWindow(IntPtr window);
+	[LibraryImport("SDL2.dll")]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	private static partial void SDL_MaximizeWindow(IntPtr window);
 
 	protected void MaximizeWindow() {
 		SDL_MaximizeWindow(Window.Handle);

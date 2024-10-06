@@ -16,6 +16,19 @@ public class Component(bool active, bool visible) {
 	public Component() : this(true, true) { }
 
 	public virtual void Added(Entity entity) {
+#if DEBUG
+		RequireComponentAttribute dependencies = GetType().GetCustomAttribute<RequireComponentAttribute>();
+		if (dependencies is not null) {
+			MethodInfo getComponent = entity.Components.GetType().GetMethod("Get");
+			foreach (Type dependency in dependencies.RequiredComponents) {
+				MethodInfo method = getComponent.MakeGenericMethod(dependency);
+				if (method.Invoke(entity.Components, null) is null) {
+					throw new RequiredComponentException(GetType(), dependency);
+				}
+			}
+		}
+#endif
+
 		Entity = entity;
 	}
 
@@ -46,3 +59,4 @@ public class Component(bool active, bool visible) {
 	public T SceneAs<T>() where T : Scene => Scene as T;
 	public T EntityAs<T>() where T : Entity => Entity as T;
 }
+

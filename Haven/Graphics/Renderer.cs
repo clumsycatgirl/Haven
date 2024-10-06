@@ -19,6 +19,12 @@ public static class Renderer {
 		SpriteBatch.Draw(Pixel, position, null, color, rotation, Vector2.Zero, new Vector2(width, height), SpriteEffects.None, 0f);
 	}
 
+	public static void Render(Action renderCallback) {
+		DrawBegin();
+		renderCallback();
+		DrawEnd();
+	}
+
 	public static void DrawEnd() {
 		SpriteBatch.End();
 	}

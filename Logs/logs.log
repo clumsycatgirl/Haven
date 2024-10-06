@@ -1,0 +1,9 @@
+------ [logs] ------
+--- [project configuration] ---
+ - Name: 'MapMaker'
+ - Version: '1.0.0.0'
+ - Author: 'MapMaker'
+ - Build: 'Debug'
+
+
+--- [Loading Textures] ---

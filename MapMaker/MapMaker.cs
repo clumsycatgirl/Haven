@@ -16,19 +16,15 @@ using Myra.Graphics2D.UI;
 
 namespace MapMaker {
 	public class MapMaker : Engine {
-		public static new MapMaker Instance { get; private set; }
-
 		private Desktop desktop;
 		internal class MapData {
 			internal HTexture2D[,] Textures;
 			internal Grid Grid;
 		}
 		private readonly Dictionary<string, MapData> mapsData;
-		private string MapName = "";
+		private string mapName = "";
 
 		public MapMaker() : base() {
-			Instance = this;
-
 			mapsData = new();
 		}
 
@@ -136,7 +132,7 @@ namespace MapMaker {
 			}
 
 		end:
-			MapName = name;
+			mapName = name;
 
 			Grid outerLayoutGrid = new() {
 				RowSpacing = 4,
@@ -197,7 +193,7 @@ namespace MapMaker {
 				Content = new Label { Text = "show grid lines" },
 				HorizontalAlignment = HorizontalAlignment.Left,
 			};
-			button.Click += (s, a) => mapsData[MapName].Grid.ShowGridLines = !mapsData[MapName].Grid.ShowGridLines;
+			button.Click += (s, a) => mapsData[mapName].Grid.ShowGridLines = !mapsData[mapName].Grid.ShowGridLines;
 
 			panel.Widgets.Add(button);
 
@@ -216,7 +212,7 @@ namespace MapMaker {
 					HorizontalAlignment = HorizontalAlignment.Center,
 				};
 				textureButton.Click += (s, a) => {
-					foreach (Widget widget in mapsData[MapName].Grid.Widgets) {
+					foreach (Widget widget in mapsData[mapName].Grid.Widgets) {
 						if (widget is Button b) {
 							b.Content = new Image {
 								Renderable = new TextureRegion(

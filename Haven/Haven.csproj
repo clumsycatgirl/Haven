@@ -13,6 +13,7 @@
   </PropertyGroup>
 	<PropertyGroup>
 		<Nullable>disable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
   <ItemGroup>
     <None Remove="Icon.ico" />

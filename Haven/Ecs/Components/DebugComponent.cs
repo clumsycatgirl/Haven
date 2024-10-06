@@ -6,4 +6,6 @@ namespace Haven.Ecs.Components;
 [Component]
 public class DebugComponent(bool active) : Component(active, true) {
 
+	public DebugComponent() : this(true) {
+	}
 }
